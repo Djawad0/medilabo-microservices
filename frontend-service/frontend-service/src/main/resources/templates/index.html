@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Recherche et Modification de Patient</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<h1>Recherche d’un patient</h1>
+
+<form method="get" action="/">
+    <label>Nom du patient :
+        <input type="text" name="nom" pattern="[A-Za-zÀ-ÿ\s\-]+" title="Seules les lettres sont autorisées" required/>
+    </label>
+    <button type="submit">Rechercher</button>
+</form>
+
+<div th:if="${message}">
+    <p th:text="${message}" style="color:red;"></p>
+</div>
+
+<a href="/ajouter"><button type="button">Ajouter un patient</button></a>
+
+<div th:if="${patients}">
+    <h2>Résultats de la recherche :</h2>
+    <ul>
+        <li th:each="p : ${patients}">
+            <form th:action="@{'/modifier/' + ${p.id}}" method="post">
+                <input type="hidden" name="id" th:value="${p.id}"/>
+
+                <p><label>Nom :
+                    <input type="text" name="nom" th:value="${p.nom}" th:readonly="${mode != p.id + ''}"/>
+                </label></p>
+
+                <p><label>Prénom :
+                    <input type="text" name="prenom" th:value="${p.prenom}" th:readonly="${mode != p.id + ''}"/>
+                </label></p>
+
+                <p><label>Date de naissance :
+                    <input type="date" name="dateNaissance" th:value="${p.dateNaissance}" th:readonly="${mode != p.id + ''}"/>
+                </label></p>
+
+                <p><label>Genre :
+                    <select name="genre" th:disabled="${mode != p.id + ''}">
+                        <option value="M" th:selected="${p.genre == 'M'}">M</option>
+                        <option value="F" th:selected="${p.genre == 'F'}">F</option>
+                    </select>
+                </label></p>
+
+                <p><label>Adresse :
+                    <input type="text" name="adresse" th:value="${p.adresse}" th:readonly="${mode != p.id + ''}"/>
+                </label></p>
+
+                <p><label>Téléphone :
+                    <input type="text" name="telephone" th:value="${p.telephone}" th:readonly="${mode != p.id + ''}"/>
+                </label></p>
+
+                <div th:if="${mode == p.id + ''}">
+                    <button type="submit">Enregistrer</button>
+                </div>
+                <div th:if="${mode != p.id + ''}">
+                    <a th:href="@{/?nom={n}&mode={id}(n=${p.nom},id=${p.id})}">
+                        <button type="button">Modifier</button>
+                    </a>
+                </div>
+                <hr/>
+            </form>
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>

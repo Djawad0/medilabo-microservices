@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajouter un Patient</title>
+</head>
+<body>
+
+<h1>Ajouter un nouveau patient</h1>
+
+<form method="post" action="/ajouter">
+    <p><label>Nom :
+        <input type="text" name="nom" required pattern="[A-Za-zÀ-ÿ\s\-]+" title="Lettres uniquement"/>
+    </label></p>
+
+    <p><label>Prénom :
+        <input type="text" name="prenom" required/>
+    </label></p>
+
+    <p><label>Date de naissance :
+        <input type="date" name="dateNaissance" required/>
+    </label></p>
+
+    <p><label>Genre :
+        <select name="genre" required>
+            <option value="M">M</option>
+            <option value="F">F</option>
+        </select>
+    </label></p>
+
+    <p><label>Adresse :
+        <input type="text" name="adresse"/>
+    </label></p>
+
+    <p><label>Téléphone :
+        <input type="text" name="telephone"/>
+    </label></p>
+
+    <button type="submit">Ajouter</button>
+</form>
+
+<a href="/"><button type="button">Retour</button></a>
+
+</body>
+</html>
