@@ -1,0 +1,51 @@
+services:
+
+  info:
+    image: info:latest
+    container_name: info
+    ports:
+      - "8081:8081"
+    networks:
+      - medilabo-net
+
+  note:
+    image: note:latest
+    container_name: note
+    ports:
+      - "8083:8083"
+    networks:
+      - medilabo-net
+
+  analyse:
+    image: analyse:latest
+    container_name: analyse
+    ports:
+      - "8084:8084" 
+    networks:
+      - medilabo-net
+
+  api-gateway:
+    image: api-gateway:latest
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    networks:
+      - medilabo-net
+    depends_on:
+      - info
+      - note
+      - analyse
+
+  frontend-service:
+    image: frontend-service:latest
+    container_name: frontend-service
+    ports:
+      - "8082:8082"
+    networks:
+      - medilabo-net
+    depends_on:
+      - api-gateway
+
+networks:
+  medilabo-net:
+    driver: bridge

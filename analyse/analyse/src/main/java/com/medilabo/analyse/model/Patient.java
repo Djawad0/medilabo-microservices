@@ -1,8 +1,7 @@
-package com.medilabo.frontend_service;
+package com.medilabo.analyse.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 
 @Data
 @NoArgsConstructor
@@ -15,5 +14,5 @@ public class Patient {
 	private String genre;
 	private String adresse;
 	private String telephone;
-	    
+
 }
