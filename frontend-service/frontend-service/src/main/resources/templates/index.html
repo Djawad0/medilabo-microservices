@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
 </head>
 <body>
+	<a href="/logout">Déconnexion</a>
 
 <h1>Recherche d’un patient</h1>
 
@@ -54,15 +55,24 @@
                 <p><label>Téléphone :
                     <input type="text" name="telephone" th:value="${p.telephone}" th:readonly="${mode != p.id + ''}"/>
                 </label></p>
+				
+				<p><strong>Statut médical :</strong>
+				    <span th:text="${statuts[p.id]}">Inconnu</span>
+				</p>
+
 
                 <div th:if="${mode == p.id + ''}">
                     <button type="submit">Enregistrer</button>
                 </div>
                 <div th:if="${mode != p.id + ''}">
-                    <a th:href="@{/?nom={n}&mode={id}(n=${p.nom},id=${p.id})}">
+                    <a th:href="@{'/?nom=' + ${p.nom} + '&mode=' + ${p.id}}">
                         <button type="button">Modifier</button>
                     </a>
                 </div>
+				<a th:href="@{'/historique/' + ${p.id}}">
+				    <button type="button">Voir l'historique</button>
+				</a>
+
                 <hr/>
             </form>
         </li>

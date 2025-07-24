@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Historique des notes</title>
+</head>
+<body>
+	<a href="/logout">Déconnexion</a>
+    <h1>Historique des notes pour le patient [[${patId}]]</h1>
+
+    <form th:action="@{'/historique/' + ${patId}}" method="post">
+        <textarea name="note" placeholder="Ajouter une nouvelle note" required></textarea>
+        <button type="submit">Ajouter</button>
+    </form>
+
+    <hr>
+
+    <ul>
+		<li th:each="note : ${notes}">
+		   <span th:text="${note.note}">Note ici</span>
+		 </li>
+    </ul>
+
+    <a href="/">Retour</a>
+</body>
+</html>
