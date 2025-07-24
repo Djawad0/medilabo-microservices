@@ -4,7 +4,7 @@
     <title>Historique des notes</title>
 </head>
 <body>
-	<a href="/logout" class="btn btn-outline-danger">Déconnexion</a>
+	<a href="/logout">Déconnexion</a>
     <h1>Historique des notes pour le patient [[${patId}]]</h1>
 
     <form th:action="@{'/historique/' + ${patId}}" method="post">

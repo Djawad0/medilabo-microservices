@@ -1,51 +1,120 @@
 services:
 
+  mysql:
+     image: mysql:8.0
+     container_name: mysql
+     restart: always
+     environment:
+       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+       MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+     ports:
+      - "3306:3306"
+     volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init/mysql:/docker-entrypoint-initdb.d/:ro
+     networks:
+      - medilabo-net
+
+  mongodb:
+    image: mongo:7
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+    volumes:
+      - mongo_data:/data/db
+      - ./init/mongo:/docker-entrypoint-initdb.d/
+    networks:
+      - medilabo-net
+
+  eureka-server:
+    image: eureka-server:latest
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - medilabo-net
+
   info:
     image: info:latest
     container_name: info
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_ROOT_USER: ${MYSQL_ROOT_USER}
+      JWT_SECRET: ${JWT_SECRET}
     ports:
       - "8081:8081"
+    depends_on:
+      - mysql 
+      - eureka-server
     networks:
       - medilabo-net
+   
 
   note:
     image: note:latest
     container_name: note
+    environment:
+      MONGO_ROOT_USER: ${MONGO_ROOT_USER}
+      MONGO_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
     ports:
       - "8083:8083"
+    depends_on:
+      - mongodb
+      - eureka-server
     networks:
       - medilabo-net
+    
 
   analyse:
     image: analyse:latest
     container_name: analyse
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
     ports:
       - "8084:8084" 
+    depends_on:
+      - eureka-server
     networks:
       - medilabo-net
 
   api-gateway:
     image: api-gateway:latest
     container_name: api-gateway
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_ROOT_USER: ${MYSQL_ROOT_USER}
+      JWT_SECRET: ${JWT_SECRET}
     ports:
-      - "8080:8080"
-    networks:
-      - medilabo-net
+      - "8080:8080"  
     depends_on:
+      - mysql
       - info
       - note
       - analyse
+      - eureka-server
+    networks:
+      - medilabo-net
 
   frontend-service:
     image: frontend-service:latest
     container_name: frontend-service
     ports:
       - "8082:8082"
-    networks:
-      - medilabo-net
     depends_on:
       - api-gateway
+      - eureka-server
+    networks:
+      - medilabo-net
 
 networks:
   medilabo-net:
     driver: bridge
+
+volumes:
+  mysql_data:
+  mongo_data:
