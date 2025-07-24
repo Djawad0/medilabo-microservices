@@ -31,6 +31,7 @@ services:
       - medilabo-net
 
   eureka-server:
+    build: ./eureka-server/eureka-server
     image: eureka-server:latest
     container_name: eureka-server
     ports:
@@ -39,6 +40,7 @@ services:
       - medilabo-net
 
   info:
+    build: ./info/info
     image: info:latest
     container_name: info
     environment:
@@ -55,6 +57,7 @@ services:
    
 
   note:
+    build: ./note/note
     image: note:latest
     container_name: note
     environment:
@@ -71,6 +74,7 @@ services:
     
 
   analyse:
+    build: ./analyse/analyse
     image: analyse:latest
     container_name: analyse
     environment:
@@ -83,6 +87,7 @@ services:
       - medilabo-net
 
   api-gateway:
+    build: ./api-gateway/api-gateway
     image: api-gateway:latest
     container_name: api-gateway
     environment:
@@ -101,6 +106,7 @@ services:
       - medilabo-net
 
   frontend-service:
+    build: ./frontend-service/frontend-service
     image: frontend-service:latest
     container_name: frontend-service
     ports:
